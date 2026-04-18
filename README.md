@@ -9,17 +9,18 @@ A real-time surveillance dashboard that visualizes incidents, AI analysis, and a
 🌐 REST API integration
 
 -------------------------------------------------------------------------------------------
-🚀 Features
-📊 Incident Timeline (dynamic data)
-🗺️ Site Map visualization
-🚁 Autonomous Drone Patrol System
-🤖 AI-based incident analysis
-🔴 Alert highlighting (danger zones)
-🔊 Audio alert when drone reaches incident
-⏸ Drone pauses at alert location
-🔁 Auto-resume patrol
+## 🚀 Features
+
+-📊 Incident Timeline (dynamic data)
+-🗺️ Site Map visualization
+-🚁 Autonomous Drone Patrol System
+-🤖 AI-based incident analysis
+-🔴 Alert highlighting (danger zones)
+-🔊 Audio alert when drone reaches incident
+-⏸ Drone pauses at alert location
+-🔁 Auto-resume patrol
 ----------------------------------------------------------------------------------------------------
-🛠️ Setup Instructions
+## 🛠️ Setup Instructions
 
 1️⃣ Clone the repository
 git clone https://github.com/your-username/your-project.git
