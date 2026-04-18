@@ -35,3 +35,40 @@ Follow the steps below to run the project locally:
 git clone https://github.com/your-username/your-project.git
 cd your-project/frontend
 
+```
+
+## 🛠️ Setup Instructions
+
+Get the project up and running locally in a few simple steps:
+
+---
+
+### 📥 Install Dependencies
+
+```bash
+npm install
+```
+⚙️ Configure Environment
+
+Create a .env file in the root directory:
+```bash
+VITE_API_URL=http://localhost:5000
+```
+🔊 Add Alert Sound
+
+Place your alert sound file here:
+
+```bash
+/public/alert.mp3
+```
+⚠️ Required for drone alert audio functionality
+
+▶️ Start Development Server
+```bash
+npm run dev
+```
+🌐 Open in Browser
+``` bash
+http://localhost:5173
+```
+
