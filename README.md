@@ -1,65 +1,14 @@
 ## 🚁 AI Drone Surveillance Dashboard (Frontend)
 
-A real-time surveillance dashboard that visualizes incidents, AI analysis, and autonomous drone patrol with alert-based interactions.
+This project is a real-time surveillance dashboard built to visualize incidents, AI-generated analysis, and autonomous drone patrol operations.
+
+The system provides an interactive UI where users can monitor incidents on a map, observe drone movement, and receive alert-based feedback including visual highlights and audio notifications.
+
+The goal of this project is to demonstrate frontend architecture, real-time UI updates, animation handling, API integration, and user interaction design in a modern web application.
 
 ## 📦 Tech Stack
-
-⚛️ React + TypeScript
-🎨 Tailwind CSS
-🎬 Framer Motion
-🌐 REST API integration
-
--------------------------------------------------------------------------------------------
-## 🚀 Features
-
--📊 Incident Timeline (dynamic data)
--🗺️ Site Map visualization
--🚁 Autonomous Drone Patrol System
--🤖 AI-based incident analysis
--🔴 Alert highlighting (danger zones)
--🔊 Audio alert when drone reaches incident
--⏸ Drone pauses at alert location
--🔁 Auto-resume patrol
-----------------------------------------------------------------------------------------------------
-## 🛠️ Setup Instructions
-
-1️⃣ Clone the repository
-git clone https://github.com/your-username/your-project.git
-cd your-project/frontend
-
-2️⃣ Install dependencies
-npm install
-
-3️⃣ Add environment variable
-Create a .env file in root:
-
-VITE_API_URL=http://localhost:5000
-
-4️⃣ Add alert sound
-Place your sound file here:
-/public/alert.mp3
-👉 This is required for alert audio system
-
-5️⃣ Start development server
-npm run dev
-
-6️⃣ Open in browser
-http://localhost:5173
-
-🔌 Backend Requirement
-
-Make sure backend is running:
-
-http://localhost:5000/api/investigate
-
-🧪 How to Test
-Open the app
-Click anywhere once (to enable audio)
-Wait for AI response
-
-
-Observe:
-🔴 Alert location highlighted
-🚁 Drone patrol movement
-⏸ Drone pauses at alert
-🔊 Sound plays once
+-Frontend Framework: React.js
+Language: TypeScript
+Styling: Tailwind CSS
+Animations: Framer Motion
+API Communication: REST API
