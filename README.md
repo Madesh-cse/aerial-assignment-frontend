@@ -1,73 +1,63 @@
-# React + TypeScript + Vite
+🚁 AI Drone Surveillance Dashboard (Frontend)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A real-time surveillance dashboard that visualizes incidents, AI analysis, and autonomous drone patrol with alert-based interactions.
 
-Currently, two official plugins are available:
+📦 Tech Stack
+⚛️ React + TypeScript
+🎨 Tailwind CSS
+🎬 Framer Motion
+🌐 REST API integration
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+-------------------------------------------------------------------------------------------
+🚀 Features
+📊 Incident Timeline (dynamic data)
+🗺️ Site Map visualization
+🚁 Autonomous Drone Patrol System
+🤖 AI-based incident analysis
+🔴 Alert highlighting (danger zones)
+🔊 Audio alert when drone reaches incident
+⏸ Drone pauses at alert location
+🔁 Auto-resume patrol
+----------------------------------------------------------------------------------------------------
+🛠️ Setup Instructions
 
-## React Compiler
+1️⃣ Clone the repository
+git clone https://github.com/your-username/your-project.git
+cd your-project/frontend
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2️⃣ Install dependencies
+npm install
 
-## Expanding the ESLint configuration
+3️⃣ Add environment variable
+Create a .env file in root:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+VITE_API_URL=http://localhost:5000
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+4️⃣ Add alert sound
+Place your sound file here:
+/public/alert.mp3
+👉 This is required for alert audio system
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+5️⃣ Start development server
+npm run dev
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+6️⃣ Open in browser
+http://localhost:5173
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+🔌 Backend Requirement
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Make sure backend is running:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+http://localhost:5000/api/investigate
+
+🧪 How to Test
+Open the app
+Click anywhere once (to enable audio)
+Wait for AI response
+
+
+Observe:
+🔴 Alert location highlighted
+🚁 Drone patrol movement
+⏸ Drone pauses at alert
+🔊 Sound plays once
