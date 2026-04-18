@@ -17,7 +17,7 @@ function App() {
   const [resolved, setResolved] = useState<string[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/investigate")
+    fetch("https://aerial-assignment-backend-1.onrender.com/api/investigate")
       .then((res) => res.json())
       .then((data) => {
         setData(data);
