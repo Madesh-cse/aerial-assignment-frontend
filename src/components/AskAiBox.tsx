@@ -9,7 +9,7 @@ const AskAIBox = ({ onResult }: Props) => {
   const [loading, setLoading] = useState(false);
 
   const askAI = async () => {
-    if (!question) return;
+    if (!question.trim()) return;
 
     setLoading(true);
 
@@ -20,27 +20,28 @@ const AskAIBox = ({ onResult }: Props) => {
     });
 
     const data = await res.json();
-
     onResult(data);
+
     setLoading(false);
+    setQuestion("");
   };
 
   return (
-    <div className="bg-white p-4 rounded-2xl shadow space-y-3">
-      <h2 className="font-semibold">Ask AI About Incident</h2>
+    <div className="space-y-2">
+      <h2 className="text-sm font-semibold">AI Copilot</h2>
 
       <input
-        className="w-full border p-2 rounded"
-        placeholder="e.g. Why is Block C suspicious?"
+        className="w-full border rounded-lg p-2 text-sm"
+        placeholder="Ask about incident..."
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
       />
 
       <button
         onClick={askAI}
-        className="bg-black text-white px-4 py-2 rounded"
+        className="w-full bg-black text-white py-2 rounded-lg text-sm hover:bg-gray-800"
       >
-        {loading ? "Analyzing..." : "Ask AI"}
+        {loading ? "Thinking..." : "Ask AI"}
       </button>
     </div>
   );

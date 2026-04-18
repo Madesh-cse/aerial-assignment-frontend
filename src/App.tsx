@@ -13,51 +13,69 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [selectedIncident, setSelectedIncident] = useState<any>(null);
   const [logs, setLogs] = useState<string[]>([]);
-  const [aiResponse, setAiResponse] = useState(null);
+  const [aiResponse, setAiResponse] = useState<any>(null);
+  const [resolved, setResolved] = useState<string[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/investigate")
       .then((res) => res.json())
       .then((data) => {
-        setData(data); 
+        setData(data);
         setLoading(false);
       })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
+      .catch(() => setLoading(false));
   }, []);
 
   return (
     <Dashboard>
       {loading ? (
-        <p className="text-center">
-          AI is investigating overnight events...
-        </p>
+        <p className="text-center">AI is investigating overnight events...</p>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          
-          {/* ✅ Pass incidents from backend */}
-          <IncidentTimeline incidents={data?.incidents} onSelect={setSelectedIncident} />
+        <div className="flex gap-4 h-[calc(100vh-80px)]">
+          {/* 🧠 LEFT MAIN SYSTEM */}
+          <div className="flex-1 grid grid-cols-2 gap-4 overflow-auto pr-2">
+            <IncidentTimeline
+              incidents={data?.incidents}
+              onSelect={setSelectedIncident}
+            />
 
-          {/* (Optional later) pass incidents to map */}
-          <SiteMap incidents={data?.incidents} aiData={data}  selectedIncident={selectedIncident} />
+            <SiteMap
+              incidents={data?.incidents}
+              aiData={data}
+              selectedIncident={selectedIncident}
+              resolved={resolved}
+            />
 
-          <DroneSimulation aiData={data} onLog={(msg) => setLogs((prev) => [...prev, msg])}/>
+            <DroneSimulation
+              aiData={data}
+              onLog={(msg) => setLogs((prev) => [...prev, msg])}
+            />
 
-          <AuditLogPanel logs={logs} />
+            <AuditLogPanel logs={logs} />
 
-          {/* ✅ Pass AI result */}
-          <ReviewPanel aiData={data} />
+            <ReviewPanel
+              aiData={data}
+              onResolve={(location) =>
+                setResolved((prev) => [...prev, location])
+              }
+            />
+          </div>
 
-          <AskAIBox onResult={setAiResponse} />
+          {/* 🤖 RIGHT COPILOT PANEL */}
+          <div className="w-[300px] border-l bg-white flex flex-col">
+            {/* Ask Box */}
+            <div className="p-3 border-b">
+              <AskAIBox onResult={setAiResponse} />
+            </div>
 
-<AIResponsePanel data={aiResponse} />
-
+            {/* Response Panel */}
+            <div className="flex-1 overflow-auto p-3">
+              <AIResponsePanel data={aiResponse} />
+            </div>
+          </div>
         </div>
       )}
     </Dashboard>
   );
 }
-
 export default App;

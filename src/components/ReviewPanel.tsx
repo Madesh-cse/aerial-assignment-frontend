@@ -2,6 +2,7 @@ import { useState } from "react";
 
 type Props = {
   aiData: any;
+  onResolve: (location: string) => void;
 };
 
 type Toast = {
@@ -10,13 +11,16 @@ type Toast = {
   type: "success" | "error" | "info";
 };
 
-const ReviewPanel = ({ aiData }: Props) => {
+const ReviewPanel = ({ aiData, onResolve }: Props) => {
   const [status, setStatus] = useState<
     "PENDING" | "APPROVED" | "ESCALATED"
   >("PENDING");
 
   const [reason, setReason] = useState("");
   const [toasts, setToasts] = useState<Toast[]>([]);
+
+  // 🔥 NEW: override alert state locally
+  const [localAlertType, setLocalAlertType] = useState<string | null>(null);
 
   if (!aiData) {
     return (
@@ -26,7 +30,6 @@ const ReviewPanel = ({ aiData }: Props) => {
     );
   }
 
-  // ✅ FULL BACKEND MAPPING
   const {
     summary,
     confidence = 0,
@@ -38,7 +41,10 @@ const ReviewPanel = ({ aiData }: Props) => {
     timestamp,
   } = aiData;
 
-  // 🔔 TOAST SYSTEM
+  // 🔥 FINAL ALERT TYPE (override after approve)
+  const finalAlertType = localAlertType || alertType;
+
+  // notification system
   const showToast = (message: string, type: Toast["type"]) => {
     const id = Date.now();
     setToasts((prev) => [...prev, { id, message, type }]);
@@ -48,14 +54,19 @@ const ReviewPanel = ({ aiData }: Props) => {
     }, 3000);
   };
 
-  // 🟢 APPROVE ACTION
+  // approve action
   const handleApprove = () => {
     setStatus("APPROVED");
     setReason("");
     showToast("🟢 Incident marked as safe", "success");
+
+    onResolve(location);
+
+    // 🔥 KEY FIX: change CRITICAL → NORMAL
+    setLocalAlertType("NORMAL");
   };
 
-  // 🚨 ESCALATE WITH FEEDBACK LOOP
+  // escalate
   const handleEscalate = () => {
     if (!reason.trim()) {
       showToast("⚠ Please provide escalation reason", "error");
@@ -69,7 +80,7 @@ const ReviewPanel = ({ aiData }: Props) => {
   };
 
   const getAlertStyle = () => {
-    switch (alertType) {
+    switch (finalAlertType) {
       case "CRITICAL":
         return "bg-red-100 text-red-600 border-red-400";
       case "WARNING":
@@ -82,15 +93,14 @@ const ReviewPanel = ({ aiData }: Props) => {
   return (
     <div
       className={`rounded-2xl shadow-lg p-5 space-y-5 relative transition-all duration-300 border ${
-        alertType === "CRITICAL"
+        finalAlertType === "CRITICAL"
           ? "bg-red-50"
-          : alertType === "WARNING"
+          : finalAlertType === "WARNING"
           ? "bg-yellow-50"
           : "bg-white"
       }`}
     >
-
-      {/* 🔔 TOASTS */}
+      {/* TOASTS */}
       <div className="fixed top-4 right-4 space-y-2 z-50">
         {toasts.map((t) => (
           <div
@@ -117,19 +127,26 @@ const ReviewPanel = ({ aiData }: Props) => {
         <span
           className={`px-3 py-1 rounded-full text-xs font-semibold border ${getAlertStyle()}`}
         >
-          {alertType}
+          {finalAlertType}
         </span>
       </div>
 
       {/* LOCATION + TIME */}
       <div className="flex justify-between text-xs text-gray-500">
         <span>📍 {location}</span>
-        <span>⏱ {timestamp ? new Date(timestamp).toLocaleString() : "N/A"}</span>
+        <span>
+          ⏱{" "}
+          {timestamp
+            ? new Date(timestamp).toLocaleString()
+            : "N/A"}
+        </span>
       </div>
 
-      {/* SUMMARY (NOW INCLUDES TIME WINDOW FROM BACKEND) */}
+      {/* SUMMARY */}
       <div className="bg-gray-50 p-4 rounded-xl border">
-        <p className="text-sm font-medium text-gray-800">{summary}</p>
+        <p className="text-sm font-medium text-gray-800">
+          {summary}
+        </p>
       </div>
 
       {/* CONFIDENCE */}
@@ -141,7 +158,7 @@ const ReviewPanel = ({ aiData }: Props) => {
 
         <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
           <div
-            className={`h-full transition-all ${
+            className={`h-full ${
               confidence > 70
                 ? "bg-green-500"
                 : confidence > 40
@@ -153,7 +170,7 @@ const ReviewPanel = ({ aiData }: Props) => {
         </div>
       </div>
 
-      {/* 🚨 SIGNALS (IMPORTANT NEW UI PART) */}
+      {/* SIGNALS */}
       <div className="flex flex-wrap gap-2">
         {signals.map((s: string, i: number) => (
           <span
@@ -165,25 +182,21 @@ const ReviewPanel = ({ aiData }: Props) => {
         ))}
       </div>
 
-      {/* 🧠 REASONING */}
+      {/* REASONING */}
       <div>
         <h3 className="font-semibold mb-2">AI Reasoning</h3>
 
-        {reasoningSteps.length === 0 ? (
-          <p className="text-sm text-gray-400">No reasoning steps</p>
-        ) : (
-          <div className="space-y-2">
-            {reasoningSteps.map((step: string, i: number) => (
-              <div
-                key={i}
-                className="flex items-start gap-2 bg-gray-50 p-2 rounded-lg"
-              >
-                <span className="text-blue-500">•</span>
-                <p className="text-sm">{step}</p>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="space-y-2">
+          {reasoningSteps.map((step: string, i: number) => (
+            <div
+              key={i}
+              className="flex items-start gap-2 bg-gray-50 p-2 rounded-lg"
+            >
+              <span className="text-blue-500">•</span>
+              <p className="text-sm">{step}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* FOLLOW UP */}
@@ -191,19 +204,20 @@ const ReviewPanel = ({ aiData }: Props) => {
         <p className="text-sm">{followUp}</p>
       </div>
 
-      {/* ESCALATION REASON INPUT */}
+      {/* ESCALATION */}
       {status === "PENDING" && (
         <textarea
           value={reason}
           onChange={(e) => setReason(e.target.value)}
-          placeholder="Why escalate? (required if escalating)"
+          placeholder="Why escalate?"
           className="w-full p-2 border rounded-lg text-sm"
         />
       )}
 
       {/* STATUS */}
       <div className="text-xs text-gray-500">
-        Status: <span className="font-semibold text-black">{status}</span>
+        Status:{" "}
+        <span className="font-semibold text-black">{status}</span>
       </div>
 
       {/* ACTIONS */}

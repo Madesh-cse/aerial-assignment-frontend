@@ -4,21 +4,25 @@ type Props = {
   incidents: any[];
   aiData?: any;
   selectedIncident?: any;
+  resolved: string[];
 };
 
-const SiteMap = ({ incidents, aiData, selectedIncident }: Props) => {
+const SiteMap = ({ incidents, aiData, selectedIncident , resolved }: Props) => {
   const [dronePos, setDronePos] = useState({ top: 50, left: 50 });
 
+  // 🧭 NORMALIZED MAP (0–100%)
   const locationMap: any = {
-    "Gate 3": { top: 80, left: 120 },
-    "Yard C": { top: 180, left: 300 },
-    "Block C": { top: 300, left: 500 },
+    "Gate 3": { top: 20, left: 20 },
+    "Yard C": { top: 50, left: 55 },
+    "Block C": { top: 75, left: 75 },
   };
 
-  // 🚨 RISK DETECTION (from incidents)
+  const isResolved = resolved.includes("Block C");
+
+  // RISK LEVEL
   const getRiskLevel = (location: string) => {
     const count = incidents?.filter((i) =>
-      i.location.toLowerCase().includes(location.toLowerCase())
+      i.location.toLowerCase().includes(location.toLowerCase()),
     ).length;
 
     if (count >= 2) return "HIGH";
@@ -26,7 +30,7 @@ const SiteMap = ({ incidents, aiData, selectedIncident }: Props) => {
     return "LOW";
   };
 
-  // 🎯 AI AUTO MOVE
+  //  AI AUTO MOVE
   useEffect(() => {
     if (!aiData?.summary) return;
 
@@ -37,62 +41,61 @@ const SiteMap = ({ incidents, aiData, selectedIncident }: Props) => {
     else if (summary.includes("gate")) setDronePos(locationMap["Gate 3"]);
   }, [aiData]);
 
-  // 👆 USER CLICK OVERRIDE
+  //  USER OVERRIDE
   useEffect(() => {
     if (!selectedIncident) return;
 
     const loc = selectedIncident.location;
-
     if (locationMap[loc]) {
       setDronePos(locationMap[loc]);
     }
   }, [selectedIncident]);
 
-  const ZoneCard = ({
-    label,
-    color,
+  //  ZONE COMPONENT
+  const Zone = ({
+    name,
+    top,
+    left,
   }: {
-    label: string;
-    color: string;
+    name: string;
+    top: number;
+    left: number;
   }) => {
-    const risk = getRiskLevel(label);
+    const risk = getRiskLevel(name);
 
     const riskColor =
       risk === "HIGH"
         ? "bg-red-500"
         : risk === "MEDIUM"
-        ? "bg-yellow-400"
-        : "bg-green-400";
+          ? "bg-yellow-400"
+          : "bg-green-400";
 
     return (
       <div
-        className={`absolute p-3 rounded-xl shadow-lg border backdrop-blur-md transition-all duration-300 ${color}`}
+        className="absolute p-3 rounded-xl bg-white shadow-md border"
+        style={{
+          top: `${top}%`,
+          left: `${left}%`,
+          transform: "translate(-50%, -50%)",
+        }}
       >
-        <div className="flex items-center justify-between gap-2">
-          <span className="font-semibold">{label}</span>
+        <div className="flex items-center justify-between gap-3">
+          <span className="font-semibold text-sm">{name}</span>
 
-          <span
-            className={`w-2 h-2 rounded-full animate-pulse ${riskColor}`}
-          />
+          <span className={`w-2 h-2 rounded-full ${riskColor}`} />
         </div>
 
-        <p className="text-xs text-gray-600 mt-1">
-          Risk: {risk}
-        </p>
+        <p className="text-xs text-gray-500 mt-1">Risk: {risk}</p>
       </div>
     );
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl shadow-lg p-4 h-[420px] relative overflow-hidden border">
-
+    <div className="relative w-full h-[420px] bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl shadow-lg overflow-hidden border">
       {/* HEADER */}
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Security Site Map</h2>
-
-        <span className="text-xs text-gray-500">
-          Live Monitoring
-        </span>
+      <div className="absolute top-3 left-4 right-4 flex justify-between items-center z-10">
+        <h2 className="text-lg font-semibold">Security Site Map</h2>
+        <span className="text-xs text-gray-500">Live Monitoring</span>
       </div>
 
       {/* GRID BACKGROUND */}
@@ -101,54 +104,34 @@ const SiteMap = ({ incidents, aiData, selectedIncident }: Props) => {
       </div>
 
       {/* ZONES */}
-      <div style={{ top: 80, left: 120 }}>
-        <div
-          className={`absolute p-3 rounded-xl border ${
-            getRiskLevel("Gate 3") === "HIGH"
-              ? "bg-red-100 border-red-500"
-              : "bg-white"
-          }`}
-        >
-          Gate 3
-        </div>
-      </div>
+      <Zone name="Gate 3" top={20} left={20} />
+      <Zone name="Yard C" top={50} left={55} />
+      <Zone name="Block C" top={75} left={75} />
 
-      <div
-        className="absolute p-3 rounded-xl border bg-white"
-        style={{ top: 180, left: 300 }}
-      >
-        Yard C
-      </div>
-
-      <div
-        className="absolute p-3 rounded-xl border bg-white"
-        style={{ top: 300, left: 500 }}
-      >
-        Block C
-      </div>
-
-      {/* DRONE (SMOOTH PREMIUM ANIMATION) */}
+      {/* 🚁 DRONE */}
       <div
         className="absolute text-2xl transition-all duration-1000 ease-in-out drop-shadow-lg"
         style={{
-          top: dronePos.top,
-          left: dronePos.left,
+          top: `${dronePos.top}%`,
+          left: `${dronePos.left}%`,
+          transform: "translate(-50%, -50%)",
         }}
       >
         🚁
       </div>
 
-      {/* DRONE RADIUS GLOW */}
+      {/* 🔵 DRONE PULSE */}
       <div
-        className="absolute w-10 h-10 rounded-full bg-blue-400 opacity-30 animate-ping"
+        className="absolute w-8 h-8 bg-blue-400 opacity-30 rounded-full animate-ping"
         style={{
-          top: dronePos.top - 10,
-          left: dronePos.left - 10,
+          top: `${dronePos.top}%`,
+          left: `${dronePos.left}%`,
+          transform: "translate(-50%, -50%)",
         }}
       />
 
-      {/* ALERT OVERLAY */}
-      {aiData?.alertType === "CRITICAL" && (
+      {/* 🚨 ALERT */}
+      {aiData?.alertType === "CRITICAL" && !isResolved &&(
         <div className="absolute top-2 right-2 bg-red-600 text-white px-3 py-1 rounded-full text-xs animate-pulse">
           🚨 CRITICAL ZONE ACTIVE
         </div>
