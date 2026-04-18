@@ -11,3 +11,27 @@ The goal of this project is to demonstrate frontend architecture, real-time UI u
 - **Animations**: Framer Motion
 - **API Communication**: REST API
 
+## 🚀 Features
+
+- **Real-time incident timeline visualization**  
+- **Interactive site map display**  
+- **Autonomous drone patrol simulation**  
+- **AI-based incident analysis integration**  
+- **Alert highlighting for danger zones**  
+- **Drone pauses automatically at alert locations**  
+- **Auto-resume patrol after alert handling**  
+- **Audio alert system when drone reaches incident**  
+- **Smooth animations using Framer Motion**
+
+## 🛠️ Setup Instructions
+
+Follow the steps below to run the project locally:
+
+---
+
+### 📥 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/your-project.git
+cd your-project/frontend
+
