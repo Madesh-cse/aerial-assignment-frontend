@@ -28,7 +28,7 @@ const AskAIBox = ({ onResult }: Props) => {
 
   return (
     <div className="space-y-2">
-      <h2 className="text-sm font-semibold">AI Copilot</h2>
+      <h2 className="text-sm font-semibold">Chat Box</h2>
 
       <input
         className="w-full border rounded-lg p-2 text-sm"
@@ -41,7 +41,7 @@ const AskAIBox = ({ onResult }: Props) => {
         onClick={askAI}
         className="w-full bg-black text-white py-2 rounded-lg text-sm hover:bg-gray-800"
       >
-        {loading ? "Thinking..." : "Ask AI"}
+        {loading ? "Thinking..." : "Ask"}
       </button>
     </div>
   );
