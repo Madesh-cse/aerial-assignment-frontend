@@ -32,8 +32,8 @@ Follow the steps below to run the project locally:
 ### 📥 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/your-project.git
-cd your-project/frontend
+git clone https://github.com/Madesh-cse/aerial-assignment-frontend
+cd your-project/aerial-agent-assignment
 
 ```
 
