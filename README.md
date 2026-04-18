@@ -9,5 +9,5 @@ The goal of this project is to demonstrate frontend architecture, real-time UI u
 ## Tech Stack
 - **Styling**: Tailwind CSS
 - **Animations**: Framer Motion
-- **API Communication **: REST API
+- **API Communication**: REST API
 
