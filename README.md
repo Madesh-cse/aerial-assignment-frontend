@@ -1,8 +1,9 @@
-🚁 AI Drone Surveillance Dashboard (Frontend)
+## 🚁 AI Drone Surveillance Dashboard (Frontend)
 
 A real-time surveillance dashboard that visualizes incidents, AI analysis, and autonomous drone patrol with alert-based interactions.
 
-📦 Tech Stack
+## 📦 Tech Stack
+
 ⚛️ React + TypeScript
 🎨 Tailwind CSS
 🎬 Framer Motion
