@@ -5,12 +5,15 @@ import SiteMap from "./components/SiteMap";
 import DroneSimulation from "./components/DroneSimulation";
 import ReviewPanel from "./components/ReviewPanel";
 import AuditLogPanel from "./components/AuditLog";
+import AskAIBox from "./components/AskAiBox";
+import AIResponsePanel from "./components/AIResponsePanel";
 
 function App() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [selectedIncident, setSelectedIncident] = useState<any>(null);
   const [logs, setLogs] = useState<string[]>([]);
+  const [aiResponse, setAiResponse] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/investigate")
@@ -46,6 +49,10 @@ function App() {
 
           {/* ✅ Pass AI result */}
           <ReviewPanel aiData={data} />
+
+          <AskAIBox onResult={setAiResponse} />
+
+<AIResponsePanel data={aiResponse} />
 
         </div>
       )}
